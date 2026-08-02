@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Spotify Portal",
+    "link": "https://open.spotify.com",
+    "icon": "logos:spotify-icon"
+  },
+  {
+    "name": "SoundCloud Stream",
+    "link": "https://soundcloud.com",
+    "icon": "logos:soundcloud"
+  },
+  {
+    "name": "YouTube Music",
+    "link": "https://music.youtube.com",
+    "icon": "logos:youtube-music"
+  },
+  {
+    "name": "Lyrics Editor",
+    "link": "https://genius.com",
+    "icon": "mdi:text-music"
+  },
+  {
+    "name": "Metronome & Tuner",
+    "link": "https://www.musicca.com/metronome",
+    "icon": "mdi:metronome"
+  },
+  {
+    "name": "Guitar Chords",
+    "link": "https://www.cifraclub.com.br",
+    "icon": "mdi:guitar-acoustic"
+  },
+  {
+    "name": "Cadastro de Músicos",
+    "link": "https://secretaria.musical.gov/cadastro",
+    "icon": "mdi:account-music"
+  },
+  {
+    "name": "Agenda de Ensaios",
+    "link": "https://secretaria.musical.gov/agenda",
+    "icon": "mdi:calendar-clock"
+  },
+  {
+    "name": "Acervo de Partituras",
+    "link": "https://secretaria.musical.gov/partituras",
+    "icon": "mdi:music-clef-treble"
+  },
+  {
+    "name": "Reserva de Instrumentos",
+    "link": "https://secretaria.musical.gov/instrumentos",
+    "icon": "mdi:guitar-electric"
+  },
+  {
+    "name": "Portal de Cursos",
+    "link": "https://secretaria.musical.gov/cursos",
+    "icon": "mdi:school"
+  },
+  {
+    "name": "Editais & Projetos",
+    "link": "https://secretaria.musical.gov/editais",
+    "icon": "mdi:file-document-outline"
+  },
+  {
+    "name": "Fórum dos Artistas",
+    "link": "https://secretaria.musical.gov/forum",
+    "icon": "mdi:forum"
+  },
+  {
+    "name": "Rádio Portal",
+    "link": "https://radio.portalmusical.com",
+    "icon": "mdi:radio-tower"
+  },
+  {
+    "name": "Estúdio de Gravação",
+    "link": "https://secretaria.musical.gov/estudio",
+    "icon": "mdi:microphone-variant"
+  },
+  {
+    "name": "Banco de Talentos",
+    "link": "https://secretaria.musical.gov/talentos",
+    "icon": "mdi:star-face"
+  },
+  {
+    "name": "Biblioteca de Áudio",
+    "link": "https://secretaria.musical.gov/audios",
+    "icon": "mdi:headphones"
+  },
+  {
+    "name": "Eventos e Concertos",
+    "link": "https://secretaria.musical.gov/eventos",
+    "icon": "mdi:ticket"
+  },
+  {
+    "name": "Certificados & Horas",
+    "link": "https://secretaria.musical.gov/certificados",
+    "icon": "mdi:certificate"
+  },
+  {
+    "name": "Portal do Aluno",
+    "link": "https://aluno.portalmusical.com",
+    "icon": "mdi:account-circle"
+  },
+  {
+    "name": "Patrimônio & Inventário",
+    "link": "https://secretaria.musical.gov/patrimonio",
+    "icon": "mdi:barcode-scan"
+  },
+  {
+    "name": "Coro Municipal",
+    "link": "https://secretaria.musical.gov/coro",
+    "icon": "mdi:account-group"
+  },
+  {
+    "name": "Orquestra Sinfônica",
+    "link": "https://secretaria.musical.gov/orquestra",
+    "icon": "mdi:violin"
+  },
+  {
+    "name": "Banda Marcial",
+    "link": "https://secretaria.musical.gov/bandamarcial",
+    "icon": "mdi:trumpet"
+  },
+  {
+    "name": "Oficinas de Verão",
+    "link": "https://secretaria.musical.gov/oficinas",
+    "icon": "mdi:sun"
+  },
+  {
+    "name": "Pesquisas & Publicações",
+    "link": "https://secretaria.musical.gov/pesquisas",
+    "icon": "mdi:book-open-page-variant"
+  }
+]

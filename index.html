@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Musical - App Hub</title>
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Portal Musical - App Hub">
+  <meta name="description" content="Central de aplicações e ferramentas do Portal Musical. Acesse seus apps e serviços favoritos em um só lugar.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Iconify Icon Web Component -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body>
+
+  <!-- Background decorative glow -->
+  <div class="ambient-glow"></div>
+
+  <div class="container">
+    <header>
+      <h1>Portal Musical</h1>
+      <p>Acesse com rapidez todos os sistemas e ferramentas do ecossistema musical.</p>
+    </header>
+
+    <!-- Search / Filter input -->
+    <div class="search-container">
+      <iconify-icon icon="ph:magnifying-glass-bold" class="search-icon"></iconify-icon>
+      <input type="text" id="searchInput" placeholder="Buscar aplicativo..." autocomplete="off">
+    </div>
+
+    <!-- Application Grid -->
+    <main class="apps-grid" id="appsGrid">
+      <!-- Skeletons shown during load -->
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </main>
+
+    <footer>
+      <p>&copy; <span id="currentYear"></span> Portal Musical - Secretaria Musical de Presidente Prudente - SP</p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const appsGrid = document.getElementById('appsGrid');
+      const searchInput = document.getElementById('searchInput');
+      let allApps = [];
+
+      // Set current year dynamically
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // Render cards
+      function renderApps(apps) {
+        if (apps.length === 0) {
+          appsGrid.innerHTML = `
+            <div class="empty-state">
+              <iconify-icon icon="ph:selection-background-light"></iconify-icon>
+              <h3>Nenhum app encontrado</h3>
+              <p>Não encontramos nenhum aplicativo correspondente à sua busca.</p>
+            </div>
+          `;
+          return;
+        }
+
+        appsGrid.innerHTML = apps.map(app => {
+          // Fallback simple link rendering if link is not a full URL
+          const displayLink = app.link.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+          
+          return `
+            <a href="${app.link}" target="_blank" rel="noopener noreferrer" class="app-card">
+              <div class="app-icon">
+                <iconify-icon icon="${app.icon || 'ph:app-window-bold'}"></iconify-icon>
+              </div>
+              <div class="app-info">
+                <span class="app-name">${escapeHTML(app.name)}</span>
+                <span class="app-link">${escapeHTML(displayLink)}</span>
+              </div>
+              <iconify-icon icon="ph:arrow-up-right-bold" class="arrow-indicator"></iconify-icon>
+            </a>
+          `;
+        }).join('');
+      }
+
+      // Safe HTML escaping
+      function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+          tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+          }[tag] || tag)
+        );
+      }
+
+      // Setup placeholder banner / instructions if apps.json setup is incomplete
+      function showSetupEmptyState(isMissingFile = false) {
+        appsGrid.innerHTML = `
+          <div class="empty-state">
+            <iconify-icon icon="ph:warning-circle-bold"></iconify-icon>
+            <h3>Configuração pendente</h3>
+            <p>${isMissingFile ? 'Arquivo <code>apps.json</code> não encontrado no servidor.' : 'Nenhum aplicativo cadastrado no seu <code>apps.json</code>.'}</p>
+            <p style="font-size: 0.85rem; margin-top: -0.5rem; opacity: 0.8;">Crie ou configure o arquivo a partir do modelo <code>apps.example.json</code>.</p>
+            <button class="setup-btn" id="loadDemoBtn">
+              <iconify-icon icon="ph:sparkle-bold"></iconify-icon>
+              Carregar dados de exemplo
+            </button>
+          </div>
+        `;
+
+        const loadDemoBtn = document.getElementById('loadDemoBtn');
+        if (loadDemoBtn) {
+          loadDemoBtn.addEventListener('click', () => {
+            fetchDemoData();
+          });
+        }
+      }
+
+      // Fetch dynamic data from apps.json
+      async function fetchApps() {
+        try {
+          const response = await fetch('./apps.json');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          allApps = await response.json();
+          if (Array.isArray(allApps) && allApps.length > 0) {
+            renderApps(allApps);
+          } else {
+            showSetupEmptyState(false);
+          }
+        } catch (error) {
+          console.warn('Could not load apps.json, attempting fallback or showing instruction state.', error);
+          showSetupEmptyState(true);
+        }
+      }
+
+      // Fetch sample/demo data as fallback
+      async function fetchDemoData() {
+        try {
+          // Show skeletons briefly for nice transition
+          appsGrid.innerHTML = `
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          `;
+          const response = await fetch('./apps.example.json');
+          if (!response.ok) {
+            throw new Error('Example file not found');
+          }
+          allApps = await response.json();
+          setTimeout(() => {
+            renderApps(allApps);
+            // Append visual feedback that they are using demo data
+             const notification = document.createElement('div');
+             notification.style.cssText = `
+               position: fixed;
+               bottom: 20px;
+               right: 20px;
+               background: rgba(33, 37, 41, 0.95);
+               color: white;
+               padding: 10px 20px;
+               border-radius: 8px;
+               font-size: 0.85rem;
+               font-weight: 500;
+               box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+               backdrop-filter: blur(10px);
+               z-index: 1000;
+               display: flex;
+               align-items: center;
+               gap: 8px;
+               animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+             `;
+            notification.innerHTML = `
+              <iconify-icon icon="ph:info-bold"></iconify-icon>
+              Visualizando dados de demonstração (apps.example.json)
+            `;
+            document.body.appendChild(notification);
+            
+            // Add keyframe style dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+              @keyframes slideIn {
+                from { transform: translateY(100px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+              }
+            `;
+            document.head.appendChild(style);
+
+            setTimeout(() => {
+              notification.style.transition = 'all 0.5s ease';
+              notification.style.opacity = '0';
+              notification.style.transform = 'translateY(20px)';
+              setTimeout(() => notification.remove(), 500);
+            }, 4000);
+          }, 600);
+        } catch (error) {
+          appsGrid.innerHTML = `
+            <div class="empty-state">
+              <iconify-icon icon="ph:x-circle-bold" style="color: var(--accent-pink);"></iconify-icon>
+              <h3>Erro ao carregar dados</h3>
+              <p>Não foi possível carregar os dados reais nem os de demonstração. Por favor, verifique se o projeto foi configurado corretamente.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Filter input event listener
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const filtered = allApps.filter(app => 
+          app.name.toLowerCase().includes(query) || 
+          app.link.toLowerCase().includes(query)
+        );
+        renderApps(filtered);
+      });
+
+      // Load initial apps list
+      fetchApps();
+    });
+  </script>
+</body>
+</html>
