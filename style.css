@@ -177,6 +177,18 @@ header p {
   color: #212529;
 }
 
+.favicon-img {
+  width: 1.6rem;
+  height: 1.6rem;
+  object-fit: contain;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.app-card:hover .favicon-img {
+  transform: scale(1.1);
+}
+
 /* App details */
 .app-info {
   display: flex;

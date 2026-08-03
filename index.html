@@ -52,6 +52,21 @@
   </div>
 
   <script>
+    // Global error handler for dynamic favicon fallbacks
+    window.handleFaviconError = function(img, domain, fallbackIcon) {
+      // If we haven't tried Google's favicon API yet, try that next
+      if (!img.dataset.triedGoogle) {
+        img.dataset.triedGoogle = 'true';
+        img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      } else {
+        // If Google favicon API also failed, replace the image with the Iconify fallback
+        const parent = img.parentElement;
+        if (parent) {
+          parent.innerHTML = `<iconify-icon icon="${fallbackIcon}"></iconify-icon>`;
+        }
+      }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       const appsGrid = document.getElementById('appsGrid');
       const searchInput = document.getElementById('searchInput');
@@ -77,10 +92,21 @@
           // Fallback simple link rendering if link is not a full URL
           const displayLink = app.link.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
           
+          let iconHtml = '';
+          const fallbackIcon = app.icon || 'ph:app-window-bold';
+          try {
+            const urlObj = new URL(app.link);
+            const origin = urlObj.origin;
+            const domain = urlObj.hostname;
+            iconHtml = `<img src="${origin}/favicon.ico" class="favicon-img" onerror="handleFaviconError(this, '${domain}', '${fallbackIcon}')" alt="${escapeHTML(app.name)}">`;
+          } catch (e) {
+            iconHtml = `<iconify-icon icon="${fallbackIcon}"></iconify-icon>`;
+          }
+
           return `
             <a href="${app.link}" target="_blank" rel="noopener noreferrer" class="app-card">
               <div class="app-icon">
-                <iconify-icon icon="${app.icon || 'ph:app-window-bold'}"></iconify-icon>
+                ${iconHtml}
               </div>
               <div class="app-info">
                 <span class="app-name">${escapeHTML(app.name)}</span>
