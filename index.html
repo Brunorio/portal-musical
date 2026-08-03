@@ -163,7 +163,7 @@
       // Fetch dynamic data from apps.json
       async function fetchApps() {
         try {
-          const response = await fetch('./apps.json');
+          const response = await fetch(`./apps.json?v=${new Date().getTime()}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
