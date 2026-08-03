@@ -54,12 +54,18 @@
   <script>
     // Global error handler for dynamic favicon fallbacks
     window.handleFaviconError = function(img, domain, fallbackIcon) {
-      // If we haven't tried Google's favicon API yet, try that next
-      if (!img.dataset.triedGoogle) {
-        img.dataset.triedGoogle = 'true';
-        img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      const step = parseInt(img.dataset.fallbackStep || '0', 10);
+      
+      if (step === 0) {
+        // Try unavatar.io next
+        img.dataset.fallbackStep = '1';
+        img.src = `https://unavatar.io/${domain}?fallback=false`;
+      } else if (step === 1) {
+        // Try icon.horse next
+        img.dataset.fallbackStep = '2';
+        img.src = `https://icon.horse/icon/${domain}`;
       } else {
-        // If Google favicon API also failed, replace the image with the Iconify fallback
+        // If everything failed, replace the image with the Iconify fallback
         const parent = img.parentElement;
         if (parent) {
           parent.innerHTML = `<iconify-icon icon="${fallbackIcon}"></iconify-icon>`;
