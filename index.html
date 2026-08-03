@@ -13,7 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1.1">
   
   <!-- Iconify Icon Web Component -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
@@ -104,7 +104,7 @@
             const urlObj = new URL(app.link);
             const origin = urlObj.origin;
             const domain = urlObj.hostname;
-            iconHtml = `<img src="${origin}/favicon.ico" class="favicon-img" onerror="handleFaviconError(this, '${domain}', '${fallbackIcon}')" alt="${escapeHTML(app.name)}">`;
+            iconHtml = `<img src="${origin}/favicon.ico" class="favicon-img" style="width: 1.6rem; height: 1.6rem; object-fit: contain; border-radius: 4px; transition: transform 0.3s ease;" onerror="handleFaviconError(this, '${domain}', '${fallbackIcon}')" alt="${escapeHTML(app.name)}">`;
           } catch (e) {
             iconHtml = `<iconify-icon icon="${fallbackIcon}"></iconify-icon>`;
           }
